@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArcGIS JS API - Dynamic Colors from GeoJSON</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.31/"></script>
+    <style>
+        html, body, #viewDiv {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #viewDiv {
+            padding-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div id="viewDiv"></div>
+    <script>
+        require([
+            "esri/Map", 
+            "esri/views/MapView", 
+            "esri/layers/GeoJSONLayer", 
+            "esri/renderers/UniqueValueRenderer", 
+            "esri/symbols/SimpleMarkerSymbol"
+        ], function(Map, MapView, GeoJSONLayer, UniqueValueRenderer, SimpleMarkerSymbol) {
+
+            var map = new Map({
+                basemap: "osm" 
+            });
+
+            var view = new MapView({
+                container: "viewDiv", 
+                map: map,
+                center: [54.2357, 23.0444],  // Center on Cairo
+                zoom: 5
+            });
+
+            // Define GeoJSON layer
+            const geojsonLayer = new GeoJSONLayer({
+                url: "js.json",
+                popupTemplate: {
+                    title: "Location Info",
+                    content: "Name: {name}<br> Color: {color}"
+                }
+            });
+
+            // Create UniqueValueRenderer for dynamic colors
+            var uniqueValueRenderer = new UniqueValueRenderer({
+                field: "color",
+                defaultSymbol: new SimpleMarkerSymbol({
+                    type: "simple-marker",
+                    color: "red", // Default color if not found
+                    size: 8,
+                    outline: { color: "black", width: 1 }
+                })
+            });
+
+            // Fetch the GeoJSON file dynamically
+            fetch("js.json")
+                .then(response => response.json())
+                .then(data => {
+                    let uniqueColors = new Set();
+                    
+                    // Extract unique colors from GeoJSON
+                    data.features.forEach(feature => {
+                        if (feature.properties && feature.properties.color) {
+                            uniqueColors.add(feature.properties.color);
+                        }
+                    });
+
+                    // Add each color to the renderer
+                    uniqueColors.forEach(color => {
+                        uniqueValueRenderer.addUniqueValueInfo({
+                            value: color,
+                            symbol: new SimpleMarkerSymbol({
+                                type: "simple-marker",
+                                color: color, // Use the actual color from the data
+                                size: 8,
+                                outline: { color: "black", width: 1 }
+                            })
+                        });
+                    });
+
+                    // Assign renderer to layer
+                    geojsonLayer.renderer = uniqueValueRenderer;
+                    map.add(geojsonLayer);
+                })
+                .catch(error => console.error("Error loading GeoJSON:", error));
+        });
+    </script>
+</body>
+</html>

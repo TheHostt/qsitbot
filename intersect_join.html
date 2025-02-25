@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css"/>
+    <title>ArcGIS Map with Conditional Labels</title>
+    <style>
+      html, body, #viewDiv {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #viewDiv {
+        padding-top: 60px;
+    }
+      .polygon-section {
+        width: 100%;
+        max-width: 800px;
+        height: 300px;
+        overflow: auto;
+        margin: 10px auto;
+        padding: 10px;
+        border: 2px solid #0079c1;
+        border-radius: 8px;
+        background-color: #f5f5f5;
+      }
+      .polygon-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #0079c1;
+        margin-bottom: 5px;
+      }
+      .point-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .point-table th, .point-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        font-size: 14px;
+      }
+      .point-table th {
+        background-color: #0079c1;
+        color: white;
+      }
+      .scroll-container {
+        height: 250px;
+        overflow-y: auto;
+      }
+      #toggleTableButton {
+        position: absolute;
+        bottom: 50px;
+        left: 10px;
+        z-index: 1000;
+        padding: 10px;
+        background-color: #0079c1;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1001;
+      }
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 800px;
+        max-height: 80%;
+        overflow-y: auto;
+      }
+      .close-button {
+        float: right;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      
+    </style>
+    <script src="https://js.arcgis.com/4.28/"></script>
+  </head>
+  <body>
+    <button id="toggleTableButton">Show Intersect Table</button>
+    <div id="viewDiv"></div>
+    <div id="resultsDiv"></div>
+    <div id="resultsModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div id="modalResultsDiv"></div>
+      </div>
+    </div>
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/GeoJSONLayer",
+        "esri/layers/GraphicsLayer",
+        "esri/Graphic",
+        "esri/rest/support/Query"
+      ], function (Map, MapView, GeoJSONLayer, GraphicsLayer, Graphic, Query) {
+        const LABEL_SCALE_THRESHOLD = 50000;  
+        const map = new Map({ basemap: "streets-navigation-vector" });
+        const view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [54.2357, 23.0444], 
+          zoom: 5
+        });
+        let polygonLayers = [];
+        let pointLayers = [];
+        const labelLayer = new GraphicsLayer();
+        map.add(labelLayer);
+        fetch("http://127.0.0.1:5000/list-files")
+          .then(response => response.json())
+          .then(files => {
+            let loadPromises = files.map(fileUrl => {
+              return new Promise((resolve, reject) => {
+                const layer = new GeoJSONLayer({ url: fileUrl });
+                layer.load().then(() => {
+                  layer.queryFeatures().then(featureSet => {
+                    if (featureSet.features.length > 0) {
+                      let firstFeature = featureSet.features[0];
+                      if (firstFeature.geometry.type === "polygon") {
+                        polygonLayers.push(layer);
+                        layer.renderer = {
+                          type: "simple",
+                          symbol: {
+                            type: "simple-fill",
+                            color: [255, 0, 0, 0.3],
+                            outline: { color: [255, 0, 0], width: 2 }
+                          }
+                        };
+                      } else if (firstFeature.geometry.type === "point") {
+                        pointLayers.push(layer);
+                        layer.renderer = {
+                          type: "simple",
+                          symbol: {
+                            type: "picture-marker",
+                            url: "https://static.arcgis.com/images/Symbols/Shapes/BluePin1LargeB.png",
+                            width: "24px",
+                            height: "24px"
+                          }
+                        };
+                      }
+                      resolve();
+                    } else {
+                      resolve();
+                    }
+                  }).catch(err => reject(err));
+                }).catch(err => reject(err));
+              });
+            });
+            Promise.all(loadPromises).then(() => {
+              map.addMany([...polygonLayers, ...pointLayers]);
+              if (polygonLayers.length > 0 && pointLayers.length > 0) {
+                view.when(processSpatialJoin);
+              }
+            }).catch(error => console.error("Error loading GeoJSON files:", error));
+          });
+        function processSpatialJoin() {
+          let groupedResults = {};
+          let matchedPoints = new Set();
+          let polygonPromises = polygonLayers.map(polygonLayer => {
+            return polygonLayer.queryFeatures().then(polygonResults => {
+              return Promise.all(polygonResults.features.map(polygon => {
+                let polygonName = polygon.attributes.city || "Unnamed Region";
+                groupedResults[polygonName] = groupedResults[polygonName] || [];
+                let pointPromises = pointLayers.map(pointLayer => {
+                  let query = new Query({
+                    geometry: polygon.geometry,
+                    spatialRelationship: "intersects",
+                    returnGeometry: true,
+                    outFields: ["*"]
+                  });
+                  return pointLayer.queryFeatures(query).then(pointResults => {
+                    groupedResults[polygonName].push(...pointResults.features);
+                    pointResults.features.forEach(point => matchedPoints.add(point.attributes.id));
+                  });
+                });
+                return Promise.all(pointPromises);
+              }));
+            });
+          });
+          Promise.all(polygonPromises).then(() => {
+            let unmatchedPoints = [];
+            let pointPromises = pointLayers.map(pointLayer => {
+              return pointLayer.queryFeatures().then(allPoints => {
+                unmatchedPoints.push(...allPoints.features.filter(point => !matchedPoints.has(point.attributes.id)));
+              });
+            });
+            Promise.all(pointPromises).then(() => {
+              displayResults(groupedResults, unmatchedPoints);
+              addLabelsToPoints();
+            });
+          });
+        }
+        function displayResults(groupedResults, unmatchedPoints) {
+          let resultsDiv = document.getElementById("modalResultsDiv");
+          resultsDiv.innerHTML = "";
+          for (const [regionName, points] of Object.entries(groupedResults)) {
+            let section = document.createElement("div");
+            section.className = "polygon-section";
+            let title = document.createElement("div");
+            title.className = "polygon-title";
+            title.textContent = `${regionName} (Features NO: ${points.length})`;
+            section.appendChild(title);
+            if (points.length > 0) {
+              section.appendChild(createPointTable(points));
+            }
+            resultsDiv.appendChild(section);
+          }
+        }
+        function createPointTable(points) {
+          let table = document.createElement("table");
+          table.className = "point-table";
+          let thead = document.createElement("thead");
+          let tbody = document.createElement("tbody");
+          let allFields = Array.from(new Set(points.flatMap(point => Object.keys(point.attributes))));
+          let headerRow = document.createElement("tr");
+          allFields.forEach(field => {
+            let th = document.createElement("th");
+            th.textContent = field;
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+          points.forEach(point => {
+            let row = document.createElement("tr");
+            allFields.forEach(field => {
+              let td = document.createElement("td");
+              td.textContent = point.attributes[field] || "";
+              row.appendChild(td);
+            });
+            tbody.appendChild(row);
+          });
+          table.appendChild(tbody);
+          return table;
+        }
+        function addLabelsToPoints() {
+          labelLayer.removeAll();
+          if (view.scale > LABEL_SCALE_THRESHOLD) return;
+          pointLayers.forEach(layer => {
+            layer.queryFeatures().then(result => {
+              result.features.forEach(point => {
+                let label = new Graphic({
+                  geometry: point.geometry,
+                  symbol: {
+                    type: "text",
+                    color: "black",
+                    text: point.attributes.name || "Unnamed",
+                    font: { size: 10, weight: "bold" },
+                    haloColor: "white",
+                    haloSize: "1px",
+                    yoffset: -15
+                  }
+                });
+                labelLayer.add(label);
+              });
+            });
+          });
+        }
+        view.watch("scale", addLabelsToPoints);
+        const modal = document.getElementById("resultsModal");
+        const closeButton = document.querySelector(".close-button");
+        const toggleTableButton = document.getElementById("toggleTableButton");
+        toggleTableButton.addEventListener("click", () => {
+          modal.style.display = "flex";
+        });
+        closeButton.addEventListener("click", () => {
+          modal.style.display = "none";
+        });
+        window.addEventListener("click", (event) => {
+          if (event.target === modal) {
+            modal.style.display = "none";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

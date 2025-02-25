@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArcGIS JS API - Simplified Buffer Query</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.31/"></script>
+    <style>
+        html, body, #viewDiv { height: 100%; width: 100%; margin: 0; padding: 0; }
+        #infoPanel {
+            position: absolute; top: 10px; right: 10px; background: white; padding: 10px;
+            font-size: 16px; font-weight: bold; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        #viewDiv {
+            padding-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div id="infoPanel">Click on the map to generate a buffer.</div>
+    <div id="viewDiv"></div>
+    <script>
+        require(["esri/Map", "esri/views/MapView", "esri/layers/GeoJSONLayer", "esri/geometry/geometryEngine",
+            "esri/Graphic", "esri/layers/GraphicsLayer", "esri/rest/support/Query",
+            "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleFillSymbol"], 
+        function(Map, MapView, GeoJSONLayer, geometryEngine, Graphic, GraphicsLayer, Query,
+            SimpleMarkerSymbol, SimpleFillSymbol) {
+            const map = new Map({ basemap: "osm" });
+            const view = new MapView({ container: "viewDiv", map: map, center: [31.2357, 30.0444], zoom: 8 });
+            const bufferLayer = new GraphicsLayer();
+            map.add(bufferLayer);
+            fetch("http://127.0.0.1:5000/list-files")
+                .then(res => res.json())
+                .then(files => files.forEach(loadGeoJSONLayer))
+                .catch(console.error);
+            function loadGeoJSONLayer(file) { const layer = new GeoJSONLayer({  url: `http://127.0.0.1:5000${file}`, popupTemplate: { title: "Feature Info", content: getPopupContent }});
+                layer.definitionExpression = "1=0";  
+            fetch(layer.url)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.features || !data.features.length) return;
+                    const geometryType = data.features[0].geometry.type;
+                    if (geometryType.includes("Polygon")) {applyPolygonRenderer(layer);} 
+                    else if (geometryType.includes("Point")) {applyPointRenderer(layer);}
+                    map.add(layer);
+                })
+                .catch(console.error);
+            }
+            function applyPointRenderer(layer) {
+                layer.renderer = {
+                    type: "simple",
+                    symbol: {type: "simple-marker", style: "circle", color: [247, 34, 101, 0.9], size: 10, outline: { color: [255, 255, 255], width: 1 }
+                    }
+                };
+            }
+            function getPopupContent(feature) {
+                return Object.entries(feature.graphic.attributes).map(([key, value]) => `<b>${key}:</b> ${value}`).join("<br>");
+            }
+            function applyPolygonRenderer(layer) {
+                layer.renderer = { type: "simple", symbol: { type: "simple-fill", color: [100, 100, 255, 0.3], outline: { color: "black", width: 1 } } };
+            }
+            view.on("click", (event) => {
+                bufferLayer.removeAll();
+                const bufferGeometry = geometryEngine.geodesicBuffer(event.mapPoint, 5, "miles");
+                bufferLayer.add(new Graphic({ geometry: bufferGeometry, symbol: bufferSymbol }));
+                map.layers.forEach(layer => {
+                    if (layer.type === "geojson") queryLayer(layer, bufferGeometry);
+                });
+            });
+            function queryLayer(layer, bufferGeometry) {
+                const query = new Query({ geometry: bufferGeometry, spatialRelationship: "intersects", returnGeometry: true, outFields: ["*"] });
+                layer.queryFeatures(query).then(res => {
+                    if (!res.features.length) {
+                        document.getElementById("infoPanel").innerHTML = `<b>No features found inside the buffer.</b>`;
+                        layer.definitionExpression = "1=0";
+                        return;
+                    }
+                    const objectIds = res.features.map(f => f.attributes[layer.objectIdField]);
+                    layer.definitionExpression = `${layer.objectIdField} IN (${objectIds.join(",")})`;
+                    bufferLayer.addMany(res.features.map(f => new Graphic({ geometry: f.geometry, symbol: selectionSymbol })));
+                    document.getElementById("infoPanel").innerHTML = `Total Features in Buffer: <b>${res.features.length}</b>`;
+                });
+            }
+
+            const bufferSymbol = new SimpleFillSymbol({ color: [255, 255, 0, 0.25], outline: { color: [105, 105, 105], width: 2 } });
+            const selectionSymbol = new SimpleMarkerSymbol({ style: "circle", color: [247, 34, 101, 0.9], size: 10, outline: { color: [255, 255, 255], width: 1 } });
+
+        });
+    </script>
+</body>
+</html>

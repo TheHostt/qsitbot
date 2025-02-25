@@ -1,0 +1,1452 @@
+{"type":"FeatureCollection","features":[
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Abu Huda Cafeteria",
+      "name:en": "Abu Huda Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": "18b Street",
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4938709231,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.3112869,
+        25.277034
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Home Bakery",
+      "name:en": "Home Bakery",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": "Su-Th 07:00-24:00",
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 10128518798,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.2541676,
+        25.2070377
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Tasty & Enjoy",
+      "name:en": "Tasty & Enjoy",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4758604125,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5384745,
+        24.3197175
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Sandwich Point Cafeteria",
+      "name:en": "Sandwich Point Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4752131138,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5377016,
+        24.3202868
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "City Way Cafeteria",
+      "name:en": "City Way Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4758568639,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5374969,
+        24.3189165
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Mini Max Cafeteria",
+      "name:en": "Mini Max Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4758604162,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5382989,
+        24.317919
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "ستاربكس",
+      "name:en": "Starbucks",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": "ستاربكس",
+      "osm_id": 5432815824,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.4133908,
+        24.4341841
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": null,
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4772977121,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.4008062,
+        24.4487513
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Real Taste Cafeteria",
+      "name:en": "Real Taste Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": "Al Tahaseer Street",
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4747867750,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.3740253,
+        24.5001188
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Star Albeit Cafeteria",
+      "name:en": "Star Albeit Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4755738093,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.3478464,
+        24.4708807
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Cafeteria MORA",
+      "name:en": "Cafeteria MORA",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4855943125,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.3811991,
+        24.496584
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Tea Planet Cafeteria",
+      "name:en": "Tea Planet Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017.",
+      "name:ar": null,
+      "osm_id": 4758265006,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5118179,
+        24.3797254
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Emirates Tea Cafeteria",
+      "name:en": "Emirates Tea Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": "Al Fardi Street",
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4745984749,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.3787413,
+        24.4913973
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Trottoir",
+      "name:en": "Trottoir",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4129619389,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.3708161,
+        24.4909478
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": null,
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4869526422,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.3779317,
+        24.4951694
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": null,
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4268310025,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5034388,
+        24.3705555
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Alexandria Cafe",
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 10886070876,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5341253,
+        24.3415144
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Grand Shooters Cafe",
+      "name:en": "Grand Shooters Cafe",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4749015874,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5318085,
+        24.340776
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Tea Point",
+      "name:en": "Tea Point",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4753702515,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5314522,
+        24.3433833
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Paris Cafe",
+      "name:en": "Paris Cafe",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4753881225,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.533033,
+        24.3415943
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": null,
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4892344223,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5330825,
+        24.3234336
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "swan",
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 7695432010,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.3808226,
+        24.4649093
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": null,
+      "name:en": "Skinny Genie",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 7172114386,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.6172048,
+        24.4337818
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": null,
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 5206264334,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.3771739,
+        24.4975796
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Al Justrain",
+      "name:en": "Al Justrain",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4760782069,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5042187,
+        24.405522
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Road Café",
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": "'Annafah Street",
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4242912109,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.3836529,
+        24.4891483
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Tim Hortons",
+      "name:en": "Tim Hortons",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4141178155,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5885105,
+        24.5020992
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "تنكر مويه",
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": "تنكر مويه",
+      "osm_id": 4987245822,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.383592,
+        24.4609328
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "ستاربكس",
+      "name:en": "Starbucks",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": "Su-Sa 08:00-22:30",
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": "Al Wahda Mall",
+      "addr:city": "أبو ظبي",
+      "source": null,
+      "name:ar": "ستاربكس",
+      "osm_id": 3830178101,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.3725057,
+        24.4706253
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": null,
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4404606995,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        53.472542,
+        24.0728123
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Sweet & Savory",
+      "name:en": "Sweet & Savory",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4758568634,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.5374413,
+        24.3189313
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Ali Salem Cafeteria",
+      "name:en": "Ali Salem Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4748987672,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        54.530083,
+        24.3419493
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Horseland Cafe",
+      "name:en": "Horseland Cafe",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": "9 Street",
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4915271971,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.3826982,
+        25.1892614
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Al Safwa Cafeteria",
+      "name:en": "Al Safwa Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": "21c Street",
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4942635709,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.3374922,
+        25.2765562
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Aqil Al Hadad Cafeteria",
+      "name:en": "Aqil Al Hadad Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": "4 Street",
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4931131468,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.3023696,
+        25.2747232
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "The Hut",
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 10869896510,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.5216865,
+        25.3216652
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Al Dejaj Al Shahi",
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": "Fr 09:00-11:30,12:30-01:30;Mo-Th,Sa-Su 09:00-01:30",
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 8236965979,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.3845243,
+        25.3175665
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Najmat Al Guwair Cafeteria",
+      "name:en": "Najmat Al Guwair Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": "Abi Al Atahia Street",
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4931493233,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.390275,
+        25.3547929
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Rajab",
+      "name:en": "Rajab",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4944737208,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.4448205,
+        25.3841724
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Farzi",
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 8059735317,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.2622535,
+        25.2078848
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Joga",
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 11067050605,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.3719037,
+        25.2599148
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Dar Cafe",
+      "name:en": "Dar Cafe",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": "الدار كافيه",
+      "osm_id": 4553721589,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.3553592,
+        25.2696851
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Bait Al Muhaisina Cafe",
+      "name:en": "Bait Al Muhaisina Cafe",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4924905037,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.407132,
+        25.2693188
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "بتيل",
+      "name:en": "Cafe Bateel",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 7027954927,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.1382431,
+        25.0817485
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Ain Alseeh Cafe",
+      "name:en": "Ain Alseeh Cafe",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "survey",
+      "name:ar": null,
+      "osm_id": 6272714054,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.9035283,
+        25.1367437
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Al Busan Cafeteria",
+      "name:en": "Al Busan Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4906104859,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.6992798,
+        24.1560056
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Class Café",
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": "Kaart Ground Survey 2017",
+      "name:ar": null,
+      "osm_id": 4940843570,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.4650531,
+        25.3924207
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Finan Cafe",
+      "name:en": "Finan Cafe",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 6061526907,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        56.3359029,
+        25.1290974
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Nourin Cafeteria",
+      "name:en": "Nourin Cafeteria",
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 6306065417,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        56.3414692,
+        25.1215027
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": null,
+      "name:en": null,
+      "amenity": "cafe",
+      "man_made": null,
+      "shop": null,
+      "tourism": null,
+      "opening_hours": null,
+      "beds": null,
+      "rooms": null,
+      "addr:full": null,
+      "addr:housenumber": null,
+      "addr:street": null,
+      "addr:city": null,
+      "source": null,
+      "name:ar": null,
+      "osm_id": 4330303989,
+      "osm_type": "nodes"
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        55.7702245,
+        24.2223543
+      ]
+    }
+  }
+]}

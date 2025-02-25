@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArcGIS JS API - Heatmap Based on Point Density</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css"/>
+    <script src="https://js.arcgis.com/4.31/"></script>
+    <style>
+        html, body, #viewDiv {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #viewDiv {
+        padding-top: 60px;
+    }
+    </style>
+</head>
+<body>
+    <div id="viewDiv"></div>
+    <script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/GeoJSONLayer",
+            "esri/renderers/HeatmapRenderer"
+        ], function(Map, MapView, GeoJSONLayer, HeatmapRenderer) {
+            var map = new Map({
+                basemap: "osm" 
+            });
+            var view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [54.2357, 23.0444],   
+                zoom: 5
+            });
+            fetch("http://127.0.0.1:5000/list-files")
+                .then(response => response.json())
+                .then(files => {
+                    files.forEach(fileUrl => {
+                        const geojsonLayer = new GeoJSONLayer({
+                            url: fileUrl,
+                            popupTemplate: {
+                                title: "Location Info"
+                            }
+                        });
+                        // Create a HeatmapRenderer based on point density (count of points)
+                        var heatmapRenderer = new HeatmapRenderer({
+                            weightExpression: "1", // Each point contributes equally and also can use this( field: "population",)  // based on field in the JSON files that represents based on the user field want
+                            blurRadius: 20, // Adjusted for smoother heat distribution
+                            minPixelIntensity: 0, // Minimum intensity for lowest density
+                            maxPixelIntensity: 500, // Adjusted for high-density points
+                            colorStops: [
+                                { ratio: 0, color: "rgba(0, 0, 255, 0)" },   // Transparent for low density
+                                { ratio: 0.2, color: "rgba(0, 255, 255, 0.6)" }, // Light Blue
+                                { ratio: 0.4, color: "rgba(0, 255, 0, 0.6)" }, // Green
+                                { ratio: 0.6, color: "rgba(255, 255, 0, 0.6)" }, // Yellow
+                                { ratio: 0.8, color: "rgba(255, 165, 0, 0.8)" }, // Orange
+                                { ratio: 1, color: "rgba(255, 0, 0, 1)" } // Red for highest density
+                            ]
+                        });
+                        geojsonLayer.renderer = heatmapRenderer;
+                        map.add(geojsonLayer);
+                    });
+                })
+                .catch(error => console.error("Error fetching GeoJSON files:", error));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArcGIS Spatial Join Closest</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #infoDiv {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 16px;
+        display: none; /* Hidden by default */
+      }
+    </style>
+    <script src="https://js.arcgis.com/4.28/"></script>
+  </head>
+  <body>
+    <div id="infoDiv"></div>
+    <div id="viewDiv"></div>
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/GeoJSONLayer",
+        "esri/rest/support/Query",
+        "esri/geometry/geometryEngine",
+        "esri/geometry/SpatialReference",
+        "esri/geometry/projection",
+        "esri/Graphic",
+        "esri/layers/GraphicsLayer",
+      ], function (
+        Map,
+        MapView,
+        GeoJSONLayer,
+        Query,
+        geometryEngine,
+        SpatialReference,
+        projection,
+        Graphic,
+        GraphicsLayer
+      ) {
+        const map = new Map({ basemap: "streets-navigation-vector" });
+
+        const view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [54.5, 24.0], // Centered on UAE
+          zoom: 6,
+        });
+
+        const graphicsLayer = new GraphicsLayer();
+        map.add(graphicsLayer); // Add a single graphics layer
+
+        let landmarkLayer, schoolsLayer;
+
+        // Fetch the list of GeoJSON files from Flask API
+        fetch("http://127.0.0.1:5000/list-files")
+          .then((response) => response.json())
+          .then((files) => {
+            let loadPromises = files.map((fileUrl) => {
+              return new Promise((resolve, reject) => {
+                const layer = new GeoJSONLayer({ url: fileUrl });
+
+                layer.load().then(() => {
+                  layer.queryFeatures().then((featureSet) => {
+                    if (featureSet.features.length > 0) {
+                      let firstFeature = featureSet.features[0];
+                      if (firstFeature.geometry.type === "point") {
+                        // Assign the first point layer as landmarkLayer
+                        if (!landmarkLayer) {
+                          landmarkLayer = layer;
+                          landmarkLayer.renderer = {
+                            type: "simple",
+                            symbol: {
+                              type: "picture-marker",
+                              url: "https://static.arcgis.com/images/Symbols/Shapes/BluePin1LargeB.png",
+                              width: "24px",
+                              height: "24px",
+                            },
+                          };
+                          map.add(landmarkLayer);
+                        } else {
+                          // Assign the second point layer as schoolsLayer
+                          schoolsLayer = layer;
+                          schoolsLayer.renderer = {
+                            type: "simple",
+                            symbol: {
+                              type: "picture-marker",
+                              url: "https://static.arcgis.com/images/Symbols/Shapes/RedPin1LargeB.png",
+                              width: "24px",
+                              height: "24px",
+                            },
+                          };
+                          map.add(schoolsLayer);
+                        }
+                      }
+                      resolve();
+                    } else {
+                      resolve();
+                    }
+                  });
+                });
+              });
+            });
+
+            // Wait until all layers are identified
+            Promise.all(loadPromises).then(() => {
+              console.log("Loaded Layers:", { landmarkLayer, schoolsLayer });
+
+              if (landmarkLayer && schoolsLayer) {
+                projection.load().then(() => {
+                  setupClickHandler();
+                });
+              }
+            });
+          })
+          .catch((error) => console.error("Error fetching GeoJSON files:", error));
+
+        function setupClickHandler() {
+          const infoDiv = document.getElementById("infoDiv");
+
+          function findNearestFeature(clickedGeometry, targetLayer) {
+            const query = new Query({
+              where: "1=1",
+              returnGeometry: true,
+              outFields: ["*"],
+            });
+
+            return targetLayer.queryFeatures(query).then((results) => {
+              if (results.features.length === 0) return null;
+
+              const clickedProjected = projection.project(
+                clickedGeometry,
+                SpatialReference.WebMercator
+              );
+              let nearestFeature = null;
+              let minDistance = Infinity;
+
+              results.features.forEach((feature) => {
+                const featureProjected = projection.project(
+                  feature.geometry,
+                  SpatialReference.WebMercator
+                );
+                const distance = geometryEngine.distance(
+                  clickedProjected,
+                  featureProjected,
+                  "meters"
+                );
+
+                if (distance < minDistance) {
+                  minDistance = distance;
+                  nearestFeature = feature;
+                }
+              });
+
+              return { nearestFeature, minDistance };
+            });
+          }
+
+          function drawLine(start, end) {
+            graphicsLayer.removeAll(); // Clear previous lines
+
+            // Project both points to Web Mercator for consistency
+            const startProjected = projection.project(
+              start,
+              SpatialReference.WebMercator
+            );
+            const endProjected = projection.project(
+              end,
+              SpatialReference.WebMercator
+            );
+
+            const polyline = {
+              type: "polyline",
+              paths: [
+                [startProjected.x, startProjected.y],
+                [endProjected.x, endProjected.y],
+              ],
+              spatialReference: { wkid: 3857 }, // Web Mercator
+            };
+
+            const lineSymbol = {
+              type: "simple-line",
+              color: [226, 119, 40],
+              width: 4,
+            };
+
+            const polylineGraphic = new Graphic({
+              geometry: polyline,
+              symbol: lineSymbol,
+            });
+
+            graphicsLayer.add(polylineGraphic);
+
+            // Zoom to fit the line
+            view.goTo({
+              target: polylineGraphic.geometry,
+              padding: 50, // Optional padding to give some space around the line
+            });
+          }
+
+          view.on("click", (event) => {
+            view.hitTest(event).then((response) => {
+              const clickedGraphic = response.results.find(
+                (result) =>
+                  result.graphic.layer === landmarkLayer ||
+                  result.graphic.layer === schoolsLayer
+              )?.graphic;
+              if (!clickedGraphic) return;
+
+              const clickedGeometry = clickedGraphic.geometry;
+              const targetLayer =
+                clickedGraphic.layer === landmarkLayer
+                  ? schoolsLayer
+                  : landmarkLayer;
+
+              findNearestFeature(clickedGeometry, targetLayer).then((result) => {
+                if (result && result.nearestFeature) {
+                  const nearestFeature = result.nearestFeature;
+                  infoDiv.innerHTML = `<b>This point</b> is closest to <b>${nearestFeature.attributes.name}</b>.`;
+                  infoDiv.style.display = "block";
+
+                  drawLine(clickedGeometry, nearestFeature.geometry);
+                }
+              });
+            });
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

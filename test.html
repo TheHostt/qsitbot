@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css" />
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArcGIS Spatial Join Intersect</title>
+    <style>
+        html, body, #viewDiv {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .polygon-section {
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid #0079c1;
+            border-radius: 8px;
+            background-color: #f5f5f5;
+            display: inline-block;
+        }
+        .polygon-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0079c1;
+            margin-bottom: 5px;
+        }
+        .point-table {
+            width: auto;
+            border-collapse: collapse;
+            margin-top: 5px;
+        }
+        .point-table th, .point-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .point-table th {
+            background-color: #0079c1;
+            color: white;
+        }
+    </style>
+    <script src="https://js.arcgis.com/4.28/"></script>
+</head>
+<body>
+
+    <div id="resultsDiv"></div>
+    <div id="viewDiv"></div>
+    <script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/GeoJSONLayer",
+            "esri/rest/support/Query"
+        ], function(Map, MapView, GeoJSONLayer, Query) {
+
+            const map = new Map({ basemap: "streets-navigation-vector" });
+            const view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [54.5, 24.0],
+                zoom: 6
+            });
+
+            let polygonLayers = [];
+            let pointLayers = [];
+
+            // Fetch the list of GeoJSON files from Flask API
+            fetch("http://127.0.0.1:5000/list-files")
+                .then(response => response.json())
+                .then(files => {
+                    let loadPromises = files.map(fileUrl => {
+                        return new Promise((resolve, reject) => {
+                            const layer = new GeoJSONLayer({ url: fileUrl });
+
+                            layer.load().then(() => {
+                                layer.queryFeatures().then(featureSet => {
+                                    if (featureSet.features.length > 0) {
+                                        let firstFeature = featureSet.features[0];
+                                        if (firstFeature.geometry.type === "polygon") {
+                                            polygonLayers.push(layer);
+                                            layer.renderer = {
+                                                type: "simple",
+                                                symbol: {
+                                                    type: "simple-fill",
+                                                    color: [255, 0, 0, 0.3],
+                                                    outline: { color: [255, 0, 0], width: 2 }
+                                                }
+                                            };
+                                        } else if (firstFeature.geometry.type === "point") {
+                                            pointLayers.push(layer);
+                                            layer.renderer = {
+                                                type: "simple",
+                                                symbol: {
+                                                    type: "picture-marker",
+                                                    url: "https://static.arcgis.com/images/Symbols/Shapes/BluePin1LargeB.png",
+                                                    width: "24px",
+                                                    height: "24px",
+                                                    color: [255, 0, 0],
+                                                    outline: { color: [255, 255, 255], width: 1 },
+                                                    size: 8
+                                                }
+                                            };
+                                        }
+                                        resolve();
+                                    } else {
+                                        resolve();
+                                    }
+                                }).catch(err => reject(err));
+                            }).catch(err => reject(err));
+                        });
+                    });
+
+                    // Wait until all layers are identified
+                    Promise.all(loadPromises).then(() => {
+                        console.log("Loaded Layers:", { polygonLayers, pointLayers });
+
+                        // Add all layers dynamically
+                        map.addMany([...polygonLayers, ...pointLayers]);
+
+                        if (polygonLayers.length > 0 && pointLayers.length > 0) {
+                            view.when(processSpatialJoin);
+                        }
+                    }).catch(error => console.error("Error loading GeoJSON files:", error));
+                })
+                .catch(error => console.error("Error fetching GeoJSON files:", error));
+
+            function processSpatialJoin() {
+                let groupedResults = {};
+                let matchedPoints = new Set();
+
+                let polygonPromises = polygonLayers.map(polygonLayer => {
+                    return polygonLayer.queryFeatures().then(polygonResults => {
+                        return Promise.all(polygonResults.features.map(polygon => {
+                            let polygonName = polygon.attributes.city || "Unnamed Region";
+                            groupedResults[polygonName] = groupedResults[polygonName] || [];
+
+                            let pointPromises = pointLayers.map(pointLayer => {
+                                let query = new Query({
+                                    geometry: polygon.geometry,
+                                    spatialRelationship: "intersects",
+                                    returnGeometry: true,
+                                    outFields: ["*"]
+                                });
+
+                                return pointLayer.queryFeatures(query).then(pointResults => {
+                                    groupedResults[polygonName].push(...pointResults.features);
+                                    pointResults.features.forEach(point => matchedPoints.add(point.attributes.id));
+                                });
+                            });
+
+                            return Promise.all(pointPromises);
+                        }));
+                    });
+                });
+
+                // After processing polygons, check for unmatched points
+                Promise.all(polygonPromises).then(() => {
+                    let unmatchedPoints = [];
+
+                    let pointPromises = pointLayers.map(pointLayer => {
+                        return pointLayer.queryFeatures().then(allPoints => {
+                            unmatchedPoints.push(...allPoints.features.filter(point => !matchedPoints.has(point.attributes.id)));
+                        });
+                    });
+
+                    Promise.all(pointPromises).then(() => {
+                        displayResults(groupedResults, unmatchedPoints);
+                    });
+                });
+            }
+
+            function displayResults(groupedResults, unmatchedPoints) {
+                let resultsDiv = document.getElementById("resultsDiv");
+                resultsDiv.innerHTML = "";
+
+                for (const [regionName, points] of Object.entries(groupedResults)) {
+                    let featureCount = points.length;
+                    let section = document.createElement("div");
+                    section.className = "polygon-section";
+                    let title = document.createElement("div");
+                    title.className = "polygon-title";
+                    title.textContent = `${regionName} (Features NO: ${featureCount})`;
+                    section.appendChild(title);
+
+                    if (featureCount > 0) {
+                        section.appendChild(createPointTable(points));
+                    }
+
+                    resultsDiv.appendChild(section);
+                }
+
+                if (unmatchedPoints.length > 0) {
+                    let section = document.createElement("div");
+                    section.className = "polygon-section";
+                    let title = document.createElement("div");
+                    title.className = "polygon-title";
+                    title.textContent = `Unmatched Points (Features NO: ${unmatchedPoints.length})`;
+                    section.appendChild(title);
+                    section.appendChild(createPointTable(unmatchedPoints));
+                    resultsDiv.appendChild(section);
+                }
+            }
+
+            function createPointTable(points) {
+                if (points.length === 0) return document.createElement("div");
+
+                let table = document.createElement("table");
+                table.className = "point-table";
+                let thead = document.createElement("thead");
+                let tbody = document.createElement("tbody");
+
+                let allFields = new Set();
+                points.forEach(point => {
+                    Object.keys(point.attributes).forEach(field => {
+                        if (field !== "__OBJECTID") allFields.add(field);
+                    });
+                });
+
+                let headerRow = document.createElement("tr");
+                allFields.forEach(field => {
+                    let th = document.createElement("th");
+                    th.textContent = field;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                points.forEach(point => {
+                    let row = document.createElement("tr");
+                    allFields.forEach(field => {
+                        let td = document.createElement("td");
+                        td.textContent = point.attributes[field] !== undefined ? point.attributes[field] : "";
+                        row.appendChild(td);
+                    });
+                    tbody.appendChild(row);
+                });
+
+                table.appendChild(tbody);
+                return table;
+            }
+        });
+    </script>
+</body>
+</html>

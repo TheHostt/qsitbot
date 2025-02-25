@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Visualization Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+         nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1a3a5e;
+            padding: 10px 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+        nav img {
+            height: 40px; 
+        }
+        body { font-family: Arial, sans-serif; text-align: center; padding-top: 70px; } 
+        #container { max-width: 800px; margin: 50px auto; padding: 20px; border-radius: 4px; padding: 20px; background-color: rgb(248, 248, 248); color: #1a3a5e; border-style: ridge;}
+        .browse-btn { margin-left: 20px; text-align: center;}
+        .btn { padding: 10px 15px; margin: 10px; border: none; cursor: pointer; border-radius: 5px; }
+        .btn-upload { background-color: #1a3a5e; color: white; }
+        .btn-voice { color: #1a3a5e; padding: 2px;}
+        .btn-process { background-color: #1d7030; color: white; width: 90%;}
+        .btn-clear { color: rgb(77, 0, 0); background-color: transparent;padding: 0; }
+        #message { margin-top: 15px; font-weight: bold; color: #333; }
+        #chartLink, #mapLink, #geojsonLink, #bufferMapLink { display: none; margin-top: 20px; }
+        textarea { width: 90%; max-width: 700px; border-radius: 5px; border-color: #1a3a5e;}
+        #loading { display: none; font-weight: bold; color: #007BFF; margin-top: 10px; }
+        .sidebar { position: fixed; top: 0; right: -350px; width: 350px; height: 100%; padding: 20px; transition: right 0.3s ease-in-out; overflow-y: auto;}
+        .sidebar.open { right: 0;}
+        .toggle-btn {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            padding: 10px 15px;
+            background-color: #1a3a5e;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+        #uploadedFilesList { margin-top: 15px; list-style: none; padding: 0; }
+        #uploadedFilesList li { background: #f4f4f4; margin: 5px 0; padding: 8px; border-radius: 5px; }
+        #iframe-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            border-left: 1px solid #ccc;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .side-controls {display: flex; justify-content: flex-end; align-items: center;}
+        #voiceStatus { display: none; }
+        #liveTranscription {
+        margin: 15px 0;
+        padding: 10px;
+        background: #f0f0f0;
+        border-radius: 5px;
+        min-height: 20px;
+        font-style: italic;
+        color: #2c3e50;
+    }
+    .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007BFF;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <img src="http://www.qsitint.com/wp-content/uploads/2021/08/Qsit_Logo_Header_04.png" alt="Qsit Logo">
+    </nav>
+
+    <div id="iframe-container">
+        <iframe id="displayFrame" src="{{ url_for('esri_map') }}"></iframe>
+    </div>
+
+    <button class="toggle-btn" onclick="toggleSidebar()">AI Tool</button>
+    
+    <div id="sidebar" class="sidebar">
+
+    <div id="container">
+        <h2>Chatbot Visualization Tool</h2>
+
+        <!-- File Upload Section -->
+        <input class="browse-btn" type="file" id="fileInput" multiple>
+        <button class="btn btn-upload" onclick="uploadFiles()">Upload Files</button>
+        <!-- <p id="loading">Uploading... Please wait.</p> -->
+        <div class="loading-container" id="loading">
+            <div class="loader"></div>
+            <!-- <p>Loading... Please wait.</p> -->
+        </div>
+        <div id="message"></div>
+
+        <!-- Instruction Section -->
+        <textarea id="instruction" placeholder="Enter modification instruction..." rows="4"></textarea>
+        <br>
+
+        <div class="side-controls">
+            <div id="liveTranscription"></div>
+            <button class="btn-voice" id="startRecording"><i class="fas fa-microphone"></i></button>
+            <button class="btn btn-clear" onclick="clearFields()"><i class="fas fa-redo-alt" style='color:rgb(97, 0, 0)'></i></button>
+        </div>
+        <span id="voiceStatus">Recording...</span>
+        
+        <button class="btn btn-process" onclick="processInstruction()">Process Instruction</button>
+        
+        <!-- Uploaded Files List -->
+        <h3>Uploaded Files</h3>
+        <ul id="uploadedFilesList"></ul>
+        
+    </div>
+    </div>
+    <script>
+        let recognition;
+        let isRecognizing = false;
+
+        function initSpeechRecognition() {
+            // Check browser support
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                alert("Speech recognition is not supported in this browser. Please use Chrome or Edge.");
+                return;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = (event) => {
+                const transcript = Array.from(event.results)
+                    .map(result => result[0])
+                    .map(result => result.transcript)
+                    .join('');
+                
+                document.getElementById('liveTranscription').textContent = transcript;
+                document.getElementById('instruction').value = transcript;
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                document.getElementById('message').innerText = `Error: ${event.error}`;
+            };
+        }
+
+        function toggleRecording() {
+            if (!recognition) {
+                initSpeechRecognition();
+                if (!recognition) return; // If still not initialized after check
+            }
+            
+            if (isRecognizing) {
+                recognition.stop();
+                document.getElementById('startRecording').classList.remove('recording');
+                document.getElementById('voiceStatus').style.display = 'none';
+                document.getElementById('liveTranscription').textContent += ' (finished)';
+            } else {
+                try {
+                    recognition.start();
+                    document.getElementById('startRecording').classList.add('recording');
+                    document.getElementById('voiceStatus').style.display = 'block';
+                    document.getElementById('liveTranscription').textContent = '';
+                } catch (error) {
+                    console.error('Recognition start failed:', error);
+                    alert('Failed to start speech recognition. Please check microphone permissions.');
+                }
+            }
+            isRecognizing = !isRecognizing;
+        }
+
+        document.getElementById('startRecording').addEventListener('click', toggleRecording);
+
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("open");
+        }
+
+        async function uploadFiles() {
+            let fileInput = document.getElementById("fileInput");
+            let files = fileInput.files;
+
+            if (files.length === 0) {
+                alert("Please select files!");
+                return;
+            }
+
+            let formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append("files", files[i]);
+            }
+
+            document.getElementById("loading").style.display = "block";
+            let response = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            let result = await response.json();
+            document.getElementById("loading").style.display = "none";
+
+            if (result.uploaded_files) {
+                document.getElementById("message").innerText = "Files uploaded successfully!";
+                displayUploadedFiles(result.uploaded_files);
+                // Reload the iframe to reflect changes
+                const iframe = document.getElementById("displayFrame");
+                iframe.src = iframe.src; // Force reload
+            } else {
+                document.getElementById("message").innerText = "Error uploading files.";
+            }
+        }
+
+        async function processInstruction() {
+            let instruction = document.getElementById("instruction").value;
+            if (!instruction) {
+                alert("Please enter an instruction.");
+                return;
+            }
+
+            document.getElementById("loading").style.display = "block";
+            let response = await fetch("/process", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    instruction: instruction
+                })
+            });
+
+            let result = await response.json();
+            document.getElementById("loading").style.display = "none";
+
+            // Reload the iframe to reflect changes
+            const iframe = document.getElementById("displayFrame");
+            iframe.src = iframe.src; // Force reload
+
+            if (result.chart_file_path) {
+                document.getElementById("chartPage").href = result.chart_file_path;
+                document.getElementById("chartLink").style.display = "block";
+                document.getElementById("message").innerText = "Chart HTML generated successfully!";
+            } else if (result.map_file_path) {
+                document.getElementById("mapPage").href = result.map_file_path;
+                document.getElementById("mapLink").style.display = "block";
+                document.getElementById("message").innerText = "Map HTML modified successfully!";
+            } else if (result.modified_file_path) {
+                document.getElementById("geojsonPage").href = result.modified_file_path;
+                document.getElementById("geojsonLink").style.display = "block";
+                document.getElementById("message").innerText = "GeoJSON modified successfully!";
+            } else if (result.buffer_map_file_path) {
+                document.getElementById("bufferMapPage").href = result.buffer_map_file_path;
+                document.getElementById("bufferMapLink").style.display = "block";
+                document.getElementById("message").innerText = "Buffer Map modification successful!";
+            }
+        }
+
+        function displayUploadedFiles(files) {
+            let list = document.getElementById("uploadedFilesList");
+            list.innerHTML = "";
+            files.forEach(file => {
+                let listItem = document.createElement("li");
+                listItem.textContent = file.file_name;
+                list.appendChild(listItem);
+            });
+        }
+
+        function clearFields() {
+            document.getElementById("fileInput").value = "";
+            document.getElementById("instruction").value = "";
+            document.getElementById("message").innerText = "";
+            document.getElementById("chartLink").style.display = "none";
+            document.getElementById("mapLink").style.display = "none";
+            document.getElementById("geojsonLink").style.display = "none";
+            document.getElementById("bufferMapLink").style.display = "none";
+        }
+    </script>
+
+
+</body>
+</html>
